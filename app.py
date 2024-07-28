@@ -8,6 +8,7 @@ import wsgiadapter
 from jinja2 import Environment, FileSystemLoader
 import os
 from whitenoise import WhiteNoise
+from middleware import Middleware
 
 
 class PyTezApp:
@@ -19,9 +20,11 @@ class PyTezApp:
         )
         self.exception_handler = None
         self.whitenoise = WhiteNoise(self.wsgi_app, root=static_dir)
+        self.middleware = Middleware(self)
 
     def __call__(self, environ, start_response):
-        return self.whitenoise(environ, start_response)
+        # return self.whitenoise(environ, start_response)
+        return self.middleware(environ, start_response)
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)
@@ -83,3 +86,6 @@ class PyTezApp:
 
     def add_exception_handler(self, handler):
         self.exception_handler = handler
+
+    def add_middleware(self, middleware_cls):
+        self.middleware.add(middleware_cls)
