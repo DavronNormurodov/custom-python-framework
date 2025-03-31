@@ -1,4 +1,6 @@
 from app import PyTezApp
+from middleware import Middleware
+
 app = PyTezApp()
 
 # def app(environ, start_response):
@@ -59,3 +61,15 @@ app.add_exception_handler(on_exception)
 @app.route('/exception')
 def exception_throwing_handler(req, resp):
     raise AttributeError('some exception')
+
+
+class LoggingMiddleware(Middleware):
+
+    def process_request(self, req):
+        print("request is being called", req.url)
+
+    def process_response(self, req, resp):
+        print("response has been generated", req.url)
+
+
+app.add_middleware(LoggingMiddleware)

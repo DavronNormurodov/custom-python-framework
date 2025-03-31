@@ -111,11 +111,11 @@ def test_custom_exception_handler(app, test_client):
 
 
 def test_non_existent_static_file(test_client):
-    assert test_client.get('http://testserver/nonexistent.css').status_code == 404
+    assert test_client.get('http://testserver/static/nonexistent.css').status_code == 404
 
 
 def test_serving_static_files(test_client):
-    response = test_client.get('http://testserver/test.css')
+    response = test_client.get('http://testserver/static/test.css')
     assert response.text == "body {background-color: chocolate;}"
 
 
@@ -126,7 +126,7 @@ def test_middleware_methods_are_called(app, test_client):
     class SimpleMiddleware(Middleware):
 
         def __init__(self, app):
-            super(self).__init__(app)
+            super().__init__(app)
 
         def process_request(self, req):
             nonlocal process_request_called

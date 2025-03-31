@@ -19,11 +19,14 @@ class PyTezApp:
             loader=FileSystemLoader(os.path.abspath(templates_dir))
         )
         self.exception_handler = None
-        self.whitenoise = WhiteNoise(self.wsgi_app, root=static_dir)
+        self.whitenoise = WhiteNoise(self.wsgi_app, root=static_dir, prefix='/static')
         self.middleware = Middleware(self)
 
     def __call__(self, environ, start_response):
-        # return self.whitenoise(environ, start_response)
+        path_info = environ["PATH_INFO"]
+        if path_info.startswith("/static"):
+            return self.whitenoise(environ, start_response)
+
         return self.middleware(environ, start_response)
 
     def wsgi_app(self, environ, start_response):
