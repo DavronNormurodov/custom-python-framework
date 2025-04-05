@@ -1,6 +1,6 @@
 import os
 
-from webob import Request, Response
+from webob import Request
 from parse import parse
 import inspect
 import requests
@@ -9,6 +9,8 @@ from jinja2 import Environment, FileSystemLoader
 import os
 from whitenoise import WhiteNoise
 from middleware import Middleware
+
+from response import Response
 
 
 class PyTezApp:
@@ -99,7 +101,7 @@ class PyTezApp:
     def template(self, template_name, context=None):
         if context is None:
             context = {}
-        return self.template_env.get_template(template_name).render(**context).encode()
+        return self.template_env.get_template(template_name).render(**context)
 
     def add_exception_handler(self, handler):
         self.exception_handler = handler

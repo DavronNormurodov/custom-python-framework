@@ -11,6 +11,11 @@ app = PyTezApp()
 #     return [b"Hello world"]
 
 
+@app.route('/json', allowed_methods=["get"])
+def home(request, response):
+    response.json = {"title": "best title"}
+
+
 @app.route('/home', allowed_methods=["get"])
 def home(request, response):
     response.text = "Hello from home page"
